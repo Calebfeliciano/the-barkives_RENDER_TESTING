@@ -1,0 +1,111 @@
+/* Collar Styles */
+.collar-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: 500px;  /* Adjust this to make the collars larger */
+  max-height: 300px; /* Adjust this to control the collar height */
+  position: relative;
+  transform-style: preserve-3d;  /* This ensures the 3D effect when rotating */
+}
+
+/* Collar Band Styles */
+.collar-band {
+  width: 500px;
+  height: 40px;  /* Adjust thickness for a more prominent collar */
+  background-color: #BBACC1;  /* Your collar color */
+  border-radius: 15px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Shadow for floating effect */
+}
+
+/* Collar Ring Position */
+.collar-ring {
+  width: 50px;  /* Larger size for the ring */
+  height: 50px;
+  background-color: #909580;
+  border-radius: 50%;
+  position: absolute;
+  top: -9px;  /* Adjust to position ring above the collar */
+  z-index: 2;
+}
+
+/* Swinging Tag Animation */
+.swing-container {
+  display: flex;
+  justify-content: center;
+}
+
+.swing-tag {
+  transform-origin: top center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.swing-container:hover .swing-tag,
+.swing-container.swing .swing-tag {
+  animation: swing 0.6s ease-in-out;
+}
+
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(6deg); }
+  50% { transform: rotate(-6deg); }
+  75% { transform: rotate(3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Shining Animation for Tag */
+.tag-shape {
+  animation: shine 2s infinite linear;
+  animation-play-state: paused;
+}
+
+.swing-container:hover .tag-shape,
+.swing-container.swing .tag-shape {
+  animation-play-state: running;
+}
+
+@keyframes shine {
+  0% {
+    fill: url(#shine);
+  }
+  100% {
+    fill: url(#shine);
+  }
+}
+
+/* Pet Carousel Styles */
+.pet-carousel {
+  display: flex;
+  justify-content: center;  /* Center the collars in the container */
+  align-items: center;  /* Vertically center the carousel */
+  overflow-x: auto;
+  gap: 3rem;  /* Adjusted to give some breathing room between collars */
+  padding: 2rem;
+  flex-direction: row;
+  width: 100%;
+  max-width: 100vw;  /* Ensure it doesn't stretch beyond the viewport */
+  scroll-snap-type: x auto;
+}
+
+/* Prevent the scrollbar from showing */
+.pet-carousel::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+@media (max-width: 768px) {
+  .arrow {
+    display: none;  /* Hide the arrow buttons on small screens */
+  }
+
+  .pet-carousel {
+    flex-direction: column;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    gap: 2rem; /* Adjust gap on mobile */
+  }
+}
