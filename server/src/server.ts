@@ -41,6 +41,16 @@ app.use('/graphql', expressMiddleware(server, {
 //   res.sendFile(path.join(clientPath, 'index.html'));
 // });
 
+// Add test route to confirm server is handling GET requests
+app.get('/ping', (_req, res) => {
+  res.send('pong');
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🌍 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 GraphQL at http://localhost:${PORT}/graphql`);
+});
 // Start server
 app.listen(PORT, () => {
   console.log(`🌍 Server running on http://localhost:${PORT}`);
