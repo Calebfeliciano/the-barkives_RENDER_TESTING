@@ -4,8 +4,8 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import bodyParser from 'body-parser'; 
 import dotenv from 'dotenv';
-// import path from 'path';
-// import { fileURLToPath } from 'url';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import typeDefs from './schemas/typeDefs.js';
 import resolvers from './schemas/resolvers.js';
@@ -36,6 +36,12 @@ app.use('/graphql', expressMiddleware(server, {
 app.get('/ping', (_req, res) => {
   res.send('pong');
 });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientPath = path.join(__dirname, '../../client/dist');
+
+app.use(express.static(clientPath));
 
 // Start server
 app.listen(PORT, () => {
