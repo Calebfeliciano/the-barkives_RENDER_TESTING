@@ -4,8 +4,8 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import bodyParser from 'body-parser'; 
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+//import path from 'path';
+//import { fileURLToPath } from 'url';
 
 import typeDefs from './schemas/typeDefs.js';
 import resolvers from './schemas/resolvers.js';
@@ -14,8 +14,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-
 
 // Middleware
 const json = bodyParser.json;
@@ -32,18 +30,16 @@ app.use('/graphql', expressMiddleware(server, {
   context: authMiddleware,
 }));
 
-// 📁 Serve React frontend in production
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const clientPath = path.join(__dirname, '../../client/dist');
+// ❌ Removed: Static frontend serving for Render deployment
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const clientPath = path.join(__dirname, '../../client/dist');
 
-// Serve static files from client/dist
-app.use(express.static(clientPath));
+// app.use(express.static(clientPath));
 
-// Serve index.html on unknown routes (for React Router)
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(clientPath, 'index.html'));
-});
+// app.get('*', (_req, res) => {
+//   res.sendFile(path.join(clientPath, 'index.html'));
+// });
 
 // Start server
 app.listen(PORT, () => {
