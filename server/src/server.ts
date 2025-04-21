@@ -4,16 +4,17 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import bodyParser from 'body-parser'; 
 import dotenv from 'dotenv';
-//import path from 'path';
-//import { fileURLToPath } from 'url';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
 
 import typeDefs from './schemas/typeDefs.js';
 import resolvers from './schemas/resolvers.js';
 import { authMiddleware } from './services/auth-service.js';
+
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT; // ✅ Use only Render-provided port
 
 // Middleware
 const json = bodyParser.json;
@@ -26,31 +27,16 @@ const server = new ApolloServer({
   resolvers,
 });
 await server.start();
+
 app.use('/graphql', expressMiddleware(server, {
   context: authMiddleware,
 }));
 
-// ❌ Removed: Static frontend serving for Render deployment
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-// const clientPath = path.join(__dirname, '../../client/dist');
-
-// app.use(express.static(clientPath));
-
-// app.get('*', (_req, res) => {
-//   res.sendFile(path.join(clientPath, 'index.html'));
-// });
-
-// Add test route to confirm server is handling GET requests
+// ✅ Optional test route
 app.get('/ping', (_req, res) => {
   res.send('pong');
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🌍 Server running on http://localhost:${PORT}`);
-  console.log(`🚀 GraphQL at http://localhost:${PORT}/graphql`);
-});
 // Start server
 app.listen(PORT, () => {
   console.log(`🌍 Server running on http://localhost:${PORT}`);
