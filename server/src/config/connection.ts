@@ -1,10 +1,14 @@
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-import mongoose from 'mongoose';
-
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/The-Barkives', );
-
-const db = mongoose.connection;
-
-export default db;
+export const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/The-Barkives');
+    console.log('✅ MongoDB connected successfully');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error);
+    process.exit(1);
+  }
+};

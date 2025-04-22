@@ -10,11 +10,14 @@ import { fileURLToPath } from 'url';
 import typeDefs from './schemas/typeDefs.js';
 import resolvers from './schemas/resolvers.js';
 import { authMiddleware } from './services/auth-service.js';
-
+import { connectToDatabase } from './config/connection.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT; // ✅ Use only Render-provided port
+const PORT = process.env.PORT;
+
+// ✅ Ensure DB is connected before server starts
+await connectToDatabase();
 
 // Middleware
 const json = bodyParser.json;
@@ -27,21 +30,25 @@ const server = new ApolloServer({
   resolvers,
 });
 await server.start();
-
 app.use('/graphql', expressMiddleware(server, {
   context: authMiddleware,
 }));
 
-// ✅ Optional test route
-app.get('/ping', (_req, res) => {
-  res.send('pong');
-});
-
+// ❌ Removed: Static frontend serving for Render deployment
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const clientPath = path.join(__dirname, '../../client/dist');
 
 app.use(express.static(clientPath));
+
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+// Add test route to confirm server is handling GET requests
+app.get('/ping', (_req, res) => {
+  res.send('pong');
+});
 
 // Start server
 app.listen(PORT, () => {
